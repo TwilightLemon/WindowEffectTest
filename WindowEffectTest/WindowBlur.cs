@@ -30,13 +30,13 @@ namespace WindowEffectTest
         {
             _window = window;
             _enableBlurin= enableBlurin;
-            var osVersion = Environment.OSVersion.Version;
-            var windows11 = new Version(10, 0, 22621);
-            if (osVersion >= windows11 && !enableBlurin)
-            {
-                _window.Deactivated += _window_Deactivated;
-                _window.Activated += _window_Activated;
-            }
+            //var osVersion = Environment.OSVersion.Version;
+            //var windows11 = new Version(10, 0, 22621);
+            //if (osVersion >= windows11 && !enableBlurin)
+            //{
+            //    _window.Deactivated += _window_Deactivated;
+            //    _window.Activated += _window_Activated;
+            //}
             NoneCallback = noneCallback;
         }
 
@@ -121,7 +121,7 @@ namespace WindowEffectTest
                     CaptionHeight = 1
                 });
                 _window.Background = new SolidColorBrush(_color);
-                SetWindowBlur(handle, 1, BlurMode.Acrylic);
+                SetWindowBlur(handle, DarkMode?1:0, BlurMode.Acrylic);
             }
             else
             {
