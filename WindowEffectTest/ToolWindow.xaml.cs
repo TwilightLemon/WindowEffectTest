@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Shell;
 
 namespace WindowEffectTest
 {
@@ -24,6 +25,12 @@ namespace WindowEffectTest
             InitializeComponent();
             Loaded += ToolWindow_Loaded;
             MouseLeftButtonDown += ToolWindow_MouseLeftButtonDown;
+            MouseRightButtonDown += ToolWindow_MouseRightButtonDown;
+        }
+
+        private void ToolWindow_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
         }
 
         private void ToolWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -31,12 +38,14 @@ namespace WindowEffectTest
             if (e.LeftButton == MouseButtonState.Pressed)
                 this.DragMove();
         }
-        public WindowAccentCompositor wac = null;
+
         private void ToolWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            wac = new(this,true);
-            wac.Color = Color.FromArgb(180, 0, 0, 0);
-            wac.IsEnabled = true;
+            WindowMaterial.SetMaterial(this,new WindowMaterial()
+            {
+                UseWindowComposition=true,
+                CompositonColor=Color.FromArgb(230,0,0,0)
+            });
         }
     }
 }

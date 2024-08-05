@@ -7,4 +7,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EleCho.WpfSuite" Version="0.6.1" />
+  </ItemGroup>
+
 </Project>

@@ -3,16 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ws="https://schemas.elecho.dev/wpfsuite"
         xmlns:local="clr-namespace:WindowEffectTest"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="255" Width="360" Background="#99000000" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <WindowChrome.WindowChrome>
-        <WindowChrome
-            CaptionHeight="1"
-            GlassFrameThickness="1" />
-    </WindowChrome.WindowChrome>
+        mc:Ignorable="d"  
+        Title="MainWindow" Height="255" Width="360" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <local:WindowMaterial.Material>
+        <local:WindowMaterial x:Name="windowMaterial" IsDarkMode="False" UseWindowComposition="False" MaterialMode="MicaAlt" CompositonColor="#3C6699FF" />
+    </local:WindowMaterial.Material>
     <Grid>
-        <CheckBox x:Name="DarkModeCheck" IsChecked="True" Content="DarkMode" HorizontalAlignment="Left" Margin="24,24,0,0" VerticalAlignment="Top" Foreground="White" Click="DarkModeCheck_Click"/>
-        <Button Content="打开一个ToolWindow" HorizontalAlignment="Left" Margin="24,54,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <CheckBox x:Name="DarkModeCheck" IsChecked="{Binding IsDarkMode, Mode=TwoWay}"
+         Content="DarkMode" HorizontalAlignment="Left"
+          Margin="24,24,0,0" VerticalAlignment="Top"
+           Foreground="White"/>
+        <Button Content="打开一个ToolWindow" 
+        HorizontalAlignment="Left" 
+        Margin="24,54,0,0" 
+        VerticalAlignment="Top"
+         Click="Button_Click"/>
     </Grid>
 </Window>

@@ -100,7 +100,7 @@ namespace WindowEffectTest
         /// 在win11下对特定窗口启用模糊特效
         /// </summary>
         public bool _enableBlurin = false;
-        private void Composite(IntPtr handle, bool isEnabled)
+        private void Composite(IntPtr handle, bool isEnabled) 
         {
             // 操作系统版本判定。
             var osVersion = Environment.OSVersion.Version;
@@ -227,18 +227,6 @@ namespace WindowEffectTest
             WCA_ACCENT_POLICY = 19,
             // 省略其他未使用的字段
         }
-
-        /// <summary>
-        /// 当前操作系统支持的透明模糊特效级别。
-        /// </summary>
-        public enum BlurSupportedLevel
-        {
-            NotSupported,
-            Aero,
-            Blur,
-            Acrylic,
-        }
-
 
         [DllImport("dwmapi.dll")]
         static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, ref int pvAttribute, int cbAttribute);
