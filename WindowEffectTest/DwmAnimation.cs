@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Interop;
 using System.Windows;
 using System.Windows.Threading;
+using System.Reflection;
 
 namespace WindowEffectTest
 {
@@ -65,26 +66,23 @@ namespace WindowEffectTest
         public const long WS_CAPTION = 0x00C00000L,
                 WS_MAXIMIZEBOX = 0x00010000L,
             WS_MINIMIZEBOX = 0x00020000L,
-            WS_THICKFRAME = 0x00040000L;
+            WS_THICKFRAME = 0x00040000L,
+            WS_OVERLAPPED=	0x00000000L,
+            WS_SYSMENU= 0x00080000L,
+            WS_BORDER= 0x00800000L;
 
         public static IntPtr SetWindowLongPtr(HandleRef hWnd, int nIndex, IntPtr dwNewLong)
-        {
-            if (IntPtr.Size == 8)
-            {
-                return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
-            }
-            else
-            {
-                return new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
-            }
-        }
+            => IntPtr.Size == 8 
+            ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong)
+            : new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
+       
         public static void EnableDwmAnimation(Window w)
         {
             var myHWND = new WindowInteropHelper(w).Handle;
             IntPtr myStyle = new(WS_CAPTION|WS_THICKFRAME|WS_MAXIMIZEBOX|WS_MINIMIZEBOX);
-            if (w.ResizeMode == ResizeMode.NoResize)
+            if (w.ResizeMode == ResizeMode.NoResize||w.ResizeMode==ResizeMode.CanMinimize)
             {
-                myStyle = new(WS_CAPTION);
+                myStyle = new(WS_CAPTION | WS_MINIMIZEBOX);
             }
             SetWindowLongPtr(new HandleRef(null, myHWND), GWL_STYLE, myStyle);
         }

@@ -6,24 +6,21 @@
         xmlns:local="clr-namespace:WindowEffectTest"
         xmlns:ws="https://schemas.elecho.dev/wpfsuite"
         mc:Ignorable="d" 
-        
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Title="MainWindow" Height="255" Width="360"
         Background="Transparent" Foreground="{DynamicResource ForeColor}" 
-        ResizeMode="CanResize"
-        ws:WindowOption.Corner="Round"
         local:DwmAnimation.EnableDwmAnimation="True"
-        
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        ws:WindowOption.Corner="Round">
     <Window.Resources>
-        <WindowChrome x:Key="windowChrome" 
+        <WindowChrome x:Key="windowChrome"
                       ResizeBorderThickness="8"/>
     </Window.Resources>
     
     <local:WindowMaterial.Material>
         <local:WindowMaterial x:Name="windowMaterial" 
                               IsDarkMode="False" 
+                              UseWindowComposition="True"
                               WindowChromeEx="{StaticResource windowChrome}"
-                              UseWindowComposition="False" 
                               MaterialMode="Acrylic" 
                               CompositonColor="#CC6699FF" >
         </local:WindowMaterial>
@@ -34,24 +31,34 @@
             <TextBlock VerticalAlignment="Center"  HorizontalAlignment="Left"
                        Text="{Binding Title, ElementName=window}"
                        Margin="20 0 0 0"/>
-            <Border Name="CloseBtn" Width="48" Background="Transparent" Cursor="Hand"
+            <ws:Button Name="CloseBtn" Width="48" Height="48"
+                   HorizontalAlignment="Right"
+                   BorderThickness="0"  ws:WindowOption.IsCloseButton="True"
+                   Background="Transparent"
+                   HoverBackground="#FFE32820" PressedBackground="#FFEF1E15"
+                   Click="CloseBtn_Click">
+                <Path Stretch="Uniform" Data="{StaticResource Icon_Close}" Width="10" Height="10" Fill="{DynamicResource ForeColor}"/>
+            </ws:Button>
+            <ws:Button Name="MaxmizeBtn" Width="48" Height="48" Margin="0 0 48 0"
+                    Background="Transparent"
+                    ws:WindowOption.IsMaximumButton="True"
+                    HoverBackground="{DynamicResource MaskColor}"
+                    PressedBackground="{DynamicResource FocusMaskColor}"
                     HorizontalAlignment="Right"
-                    WindowChrome.IsHitTestVisibleInChrome="True"
-                    MouseDown="CloseBtn_MouseDown">
-                <Path Stretch="Uniform" Width="12" Height="12" Fill="{DynamicResource ForeColor}" Data="{DynamicResource Icon_Close}"/>
-            </Border>
-            <Border Name="MaximizeBtn" Width="48" Background="Transparent" Cursor="Hand"
-                    HorizontalAlignment="Right" Margin="0 0 48 0"
-                    WindowChrome.IsHitTestVisibleInChrome="True"
-                    MouseDown="MaximizeBtn_MouseDown">
-                <Path Stretch="Uniform" Width="12" Height="12" Fill="{DynamicResource ForeColor}" Data="{DynamicResource Icon_Maximize}"/>
-            </Border>
-            <Border Name="MinimizeBtn" Width="48" Background="Transparent" Cursor="Hand"
-                    HorizontalAlignment="Right" Margin="0 0 96 0"
-                    WindowChrome.IsHitTestVisibleInChrome="True"
-                    MouseDown="MinimizeBtn_MouseDown">
-                <Path Stretch="Uniform"  Width="12" Height="12" Fill="{DynamicResource ForeColor}" Data="{DynamicResource Icon_Minimize}"/>
-            </Border>
+                    BorderThickness="0"
+                    Click="MaxmizeBtn_Click">
+                <Path Stretch="Uniform" Data="{StaticResource Icon_Maximize}" Width="10" Height="10" Fill="{DynamicResource ForeColor}"/>
+            </ws:Button>
+            <ws:Button Name="MinimizeBtn" Width="48" Height="48" Margin="0 0 96 0"
+                   Background="Transparent"
+                   HorizontalAlignment="Right"
+                   BorderThickness="0"
+                   ws:WindowOption.IsMinimumButton="True"
+                   HoverBackground="{DynamicResource MaskColor}"
+                   PressedBackground="{DynamicResource FocusMaskColor}"
+                   Click="MinimizeBtn_Click">
+                <Path Stretch="Uniform" Data="{StaticResource Icon_Minimize}" Width="10" Height="10" Fill="{DynamicResource ForeColor}"/>
+            </ws:Button>
         </Grid>
         <Grid>
             <CheckBox x:Name="DarkModeCheck"

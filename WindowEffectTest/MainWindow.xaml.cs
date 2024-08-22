@@ -43,17 +43,17 @@ namespace WindowEffectTest
                 this.DragMove();
         }
 
-        private void CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void MaximizeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void MaxmizeBtn_Click(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState == WindowState.Maximized? WindowState.Normal: WindowState.Maximized;
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
 
-        private void MinimizeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void MinimizeBtn_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
