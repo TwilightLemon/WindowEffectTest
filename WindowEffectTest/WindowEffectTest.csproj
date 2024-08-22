@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EleCho.WpfSuite" Version="0.6.1" />
+    <PackageReference Include="EleCho.WpfSuite" Version="0.7.0" />
   </ItemGroup>
 
 </Project>

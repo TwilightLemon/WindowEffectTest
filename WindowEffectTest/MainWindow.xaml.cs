@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Shell;
 using static WindowEffectTest.MaterialApis;
 
 namespace WindowEffectTest
@@ -12,11 +14,17 @@ namespace WindowEffectTest
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool _isDarkMode;
+        private bool _isDarkMode = false;
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            App.SetDarkMode(IsDarkMode);
         }
 
         public bool IsDarkMode
@@ -25,6 +33,7 @@ namespace WindowEffectTest
             set
             {
                 windowMaterial.IsDarkMode = _isDarkMode = value;
+                App.SetDarkMode(value);
             }
         }
 
@@ -34,9 +43,19 @@ namespace WindowEffectTest
                 this.DragMove();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            new ToolWindow().Show();
+            Close();
+        }
+
+        private void MaximizeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized? WindowState.Normal: WindowState.Maximized;
+        }
+
+        private void MinimizeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
         }
     }
 }

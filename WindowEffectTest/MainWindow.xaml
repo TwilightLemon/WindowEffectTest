@@ -1,24 +1,64 @@
-﻿<Window x:Class="WindowEffectTest.MainWindow"
+﻿<Window x:Name="window" x:Class="WindowEffectTest.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ws="https://schemas.elecho.dev/wpfsuite"
         xmlns:local="clr-namespace:WindowEffectTest"
-        mc:Ignorable="d"  
-        Title="MainWindow" Height="255" Width="360" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        xmlns:ws="https://schemas.elecho.dev/wpfsuite"
+        mc:Ignorable="d" 
+        
+        Title="MainWindow" Height="255" Width="360"
+        Background="Transparent" Foreground="{DynamicResource ForeColor}" 
+        ResizeMode="CanResize"
+        ws:WindowOption.Corner="Round"
+        local:DwmAnimation.EnableDwmAnimation="True"
+        
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Window.Resources>
+        <WindowChrome x:Key="windowChrome" 
+                      ResizeBorderThickness="8"/>
+    </Window.Resources>
+    
     <local:WindowMaterial.Material>
-        <local:WindowMaterial x:Name="windowMaterial" IsDarkMode="False" UseWindowComposition="False" MaterialMode="MicaAlt" CompositonColor="#3C6699FF" />
+        <local:WindowMaterial x:Name="windowMaterial" 
+                              IsDarkMode="False" 
+                              WindowChromeEx="{StaticResource windowChrome}"
+                              UseWindowComposition="False" 
+                              MaterialMode="Acrylic" 
+                              CompositonColor="#CC6699FF" >
+        </local:WindowMaterial>
     </local:WindowMaterial.Material>
-    <Grid>
-        <CheckBox x:Name="DarkModeCheck" IsChecked="{Binding IsDarkMode, Mode=TwoWay}"
-         Content="DarkMode" HorizontalAlignment="Left"
-          Margin="24,24,0,0" VerticalAlignment="Top"
-           Foreground="White"/>
-        <Button Content="打开一个ToolWindow" 
-        HorizontalAlignment="Left" 
-        Margin="24,54,0,0" 
-        VerticalAlignment="Top"
-         Click="Button_Click"/>
-    </Grid>
+    
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" Height="48">
+            <TextBlock VerticalAlignment="Center"  HorizontalAlignment="Left"
+                       Text="{Binding Title, ElementName=window}"
+                       Margin="20 0 0 0"/>
+            <Border Name="CloseBtn" Width="48" Background="Transparent" Cursor="Hand"
+                    HorizontalAlignment="Right"
+                    WindowChrome.IsHitTestVisibleInChrome="True"
+                    MouseDown="CloseBtn_MouseDown">
+                <Path Stretch="Uniform" Width="12" Height="12" Fill="{DynamicResource ForeColor}" Data="{DynamicResource Icon_Close}"/>
+            </Border>
+            <Border Name="MaximizeBtn" Width="48" Background="Transparent" Cursor="Hand"
+                    HorizontalAlignment="Right" Margin="0 0 48 0"
+                    WindowChrome.IsHitTestVisibleInChrome="True"
+                    MouseDown="MaximizeBtn_MouseDown">
+                <Path Stretch="Uniform" Width="12" Height="12" Fill="{DynamicResource ForeColor}" Data="{DynamicResource Icon_Maximize}"/>
+            </Border>
+            <Border Name="MinimizeBtn" Width="48" Background="Transparent" Cursor="Hand"
+                    HorizontalAlignment="Right" Margin="0 0 96 0"
+                    WindowChrome.IsHitTestVisibleInChrome="True"
+                    MouseDown="MinimizeBtn_MouseDown">
+                <Path Stretch="Uniform"  Width="12" Height="12" Fill="{DynamicResource ForeColor}" Data="{DynamicResource Icon_Minimize}"/>
+            </Border>
+        </Grid>
+        <Grid>
+            <CheckBox x:Name="DarkModeCheck"
+                      IsChecked="{Binding IsDarkMode, Mode=TwoWay}"
+                      Foreground="{DynamicResource ForeColor}"
+                      Content="DarkMode"
+                       Margin="20"  VerticalAlignment="Top" />
+        </Grid>
+    </DockPanel>
 </Window>

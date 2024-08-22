@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:WindowEffectTest"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="IconData.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="ForeColor" Color="White"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

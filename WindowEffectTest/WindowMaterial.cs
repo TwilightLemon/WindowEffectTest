@@ -3,15 +3,16 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Shell;
 
 namespace WindowEffectTest;
 public class WindowMaterial : DependencyObject
 {
-    internal enum APIType
+    private enum APIType
     {
         NONE, SYSTEMBACKDROP, COMPOSITION
     }
-    internal Window? AttachedWindow
+    private Window? AttachedWindow
     {
         get => _window;
         set
@@ -26,9 +27,19 @@ public class WindowMaterial : DependencyObject
             }
         }
     }
+
+    private void AttachedWindow_SourceInitialized(object? sender, EventArgs e)
+    {
+        InitWindow();
+    }
+
     private void InitWindow()
     {
         _hWnd = new WindowInteropHelper(_window).Handle;
+        if (WindowChromeEx != null)
+        {
+            WindowChrome.SetWindowChrome(_window, WindowChromeEx);
+        }
         SetDarkMode(IsDarkMode);
         Apply();
     }
@@ -55,11 +66,6 @@ public class WindowMaterial : DependencyObject
         }
     }
 
-    private void AttachedWindow_SourceInitialized(object? sender, EventArgs e)
-    {
-        InitWindow();
-    }
-
     public static WindowMaterial GetMaterial(Window obj)
     {
         return (WindowMaterial)obj.GetValue(MaterialProperty);
@@ -75,7 +81,7 @@ public class WindowMaterial : DependencyObject
             typeof(WindowMaterial), typeof(WindowMaterial),
             new PropertyMetadata(null, OnMaterialChanged));
 
-    internal static void OnMaterialChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnMaterialChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is Window w && e.NewValue is WindowMaterial m)
         {
@@ -93,7 +99,7 @@ public class WindowMaterial : DependencyObject
         DependencyProperty.Register("IsDarkMode",
             typeof(bool), typeof(WindowMaterial),
             new PropertyMetadata(false, OnIsDarkModeChanged));
-    internal static void OnIsDarkModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnIsDarkModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is WindowMaterial w)
         {
@@ -112,7 +118,7 @@ public class WindowMaterial : DependencyObject
         DependencyProperty.Register("MaterialMode",
             typeof(MaterialType), typeof(WindowMaterial),
             new PropertyMetadata(MaterialType.None, OnMaterialModeChanged));
-    internal static void OnMaterialModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnMaterialModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is WindowMaterial m)
         {
@@ -127,6 +133,27 @@ public class WindowMaterial : DependencyObject
 
 
 
+    public WindowChrome WindowChromeEx
+    {
+        get { return (WindowChrome)GetValue(WindowChromeExProperty); }
+        set { SetValue(WindowChromeExProperty, value); }
+    }
+
+    public static readonly DependencyProperty WindowChromeExProperty =
+        DependencyProperty.Register("WindowChromeEx", 
+            typeof(WindowChrome), typeof(WindowMaterial),
+            new PropertyMetadata(null,OnWindowChromeExChanged));
+
+    private static void OnWindowChromeExChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is WindowMaterial{ } m&& e.NewValue is WindowChrome{ } wc&&m._window!=null)
+        {
+            WindowChrome.SetWindowChrome(m._window, wc);
+            m.Apply();
+        }
+    }
+
+
     public bool UseWindowComposition
     {
         get { return (bool)GetValue(UseWindowCompositionProperty); }
@@ -138,7 +165,7 @@ public class WindowMaterial : DependencyObject
             typeof(bool), typeof(WindowMaterial),
             new PropertyMetadata(false, OnUseWindowCompositionChanged));
 
-    internal static void OnUseWindowCompositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnUseWindowCompositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is WindowMaterial m)
         {
@@ -177,7 +204,7 @@ public class WindowMaterial : DependencyObject
         DependencyProperty.Register("CompositonColor", 
             typeof(Color), typeof(WindowMaterial),
             new PropertyMetadata(Color.FromArgb(180,0,0,0),OnCompositionColorChanged));
-    internal static void OnCompositionColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnCompositionColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is WindowMaterial m)
         {
@@ -189,8 +216,8 @@ public class WindowMaterial : DependencyObject
 
     private IntPtr _hWnd = IntPtr.Zero;
     private Window? _window = null;
-    internal APIType CurrentAPI = APIType.NONE;
-    internal void SetCompositionColor(Color value)
+    private APIType CurrentAPI = APIType.NONE;
+    private void SetCompositionColor(Color value)
     {
         _compositionColor = value;
         _blurColor =
@@ -203,24 +230,33 @@ public class WindowMaterial : DependencyObject
        // 组装透明分量。
        value.A << 24;
     }
-    internal void SetDarkMode(bool isDarkMode)
+    private void SetDarkMode(bool isDarkMode)
     {
         if (_hWnd == IntPtr.Zero) return;
         MaterialApis.SetDarkMode(_hWnd, isDarkMode);
     }
-    internal void SetBackDropType(MaterialType blurMode)
+    private void SetBackDropType(MaterialType blurMode)
     {
         if (_hWnd == IntPtr.Zero) return;
+        if (blurMode == MaterialType.Acrylic)
+        {
+            _window.Background = new SolidColorBrush(CompositonColor);
+        }
+        else
+        {
+            _window.Background = Brushes.Transparent;
+        }
         MaterialApis.SetBackDropType(_hWnd, blurMode);
         CurrentAPI = blurMode == MaterialType.None ? APIType.NONE : APIType.SYSTEMBACKDROP;
     }
-    internal void SetWindowCompositon(bool enable)
+    private void SetWindowCompositon(bool enable)
     {
         if (_hWnd == IntPtr.Zero) return;
+        if (enable) _window.Background = Brushes.Transparent;
         MaterialApis.SetWindowComposition(_hWnd, enable, _blurColor);
         CurrentAPI = enable ? APIType.COMPOSITION : APIType.NONE;
     }
-    internal void SetWindowProperty(bool isLagcy = false)
+    private void SetWindowProperty(bool isLagcy = false)
     {
         if (_hWnd == IntPtr.Zero) return;
         var hwndSource = (HwndSource)PresentationSource.FromVisual(_window);
