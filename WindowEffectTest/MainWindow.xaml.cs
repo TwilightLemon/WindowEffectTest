@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -56,6 +57,12 @@ namespace WindowEffectTest
         private void MinimizeBtn_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private async void ShowPopupBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Yield();
+            testPopup.IsOpen = true;
         }
     }
 }
