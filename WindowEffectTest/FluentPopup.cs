@@ -47,7 +47,7 @@ public static class FluentTooltip
         if(sender is ToolTip tip&& tip.Background is SolidColorBrush cb)
         {
             var hwnd = tip.GetNativeWindowHwnd();
-            FluentPopupFunc.SetPopupWindowMaterial(hwnd, cb.Color);
+            FluentPopupFunc.SetPopupWindowMaterial(hwnd, cb.Color, MaterialApis.WindowCorner.RoundSmall);
         }
     }
 }
@@ -122,7 +122,7 @@ internal static class FluentPopupFunc
         }
         return IntPtr.Zero;
     }
-    public static void SetPopupWindowMaterial(IntPtr hwnd,Color compositionColor)
+    public static void SetPopupWindowMaterial(IntPtr hwnd,Color compositionColor, MaterialApis.WindowCorner corner= MaterialApis.WindowCorner.Round)
     {
         if (hwnd != IntPtr.Zero)
         {
@@ -130,7 +130,7 @@ internal static class FluentPopupFunc
             var hwndSource = HwndSource.FromHwnd(hwnd);
             MaterialApis.SetWindowProperties(hwndSource, 0);
             MaterialApis.SetWindowComposition(hwnd, true, hexColor);
-            MaterialApis.SetWindowCorner(hwnd, MaterialApis.WindowCorner.Round);
+            MaterialApis.SetWindowCorner(hwnd, corner);
         }
     }
 }

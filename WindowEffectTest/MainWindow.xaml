@@ -18,7 +18,7 @@
         ws:WindowOption.Corner="Round"
         local:DwmAnimation.EnableDwmAnimation="True">
     <Window.Resources>
-        <WindowChrome x:Key="windowChrome"/>
+        <WindowChrome x:Key="windowChrome" CaptionHeight="1"/>
     </Window.Resources>
 
     <local:WindowMaterial.Material>
@@ -38,7 +38,7 @@
                        Margin="20 0 0 0"/>
             <ws:Button Name="CloseBtn" Width="48" Height="48"
                    HorizontalAlignment="Right"
-                   BorderThickness="0"  ws:WindowOption.IsCloseButton="True"
+                   BorderThickness="0"
                    Background="Transparent"
                    HoverBackground="#FFE32820" PressedBackground="#FFEF1E15"
                    Click="CloseBtn_Click">
@@ -46,7 +46,6 @@
             </ws:Button>
             <ws:Button Name="MaxmizeBtn" Width="48" Height="48" Margin="0 0 48 0"
                     Background="Transparent"
-                    ws:WindowOption.IsMaximumButton="True"
                     HoverBackground="{DynamicResource MaskColor}"
                     PressedBackground="{DynamicResource FocusMaskColor}"
                     HorizontalAlignment="Right"
@@ -58,7 +57,6 @@
                    Background="Transparent"
                    HorizontalAlignment="Right"
                    BorderThickness="0"
-                   ws:WindowOption.IsMinimumButton="True"
                    HoverBackground="{DynamicResource MaskColor}"
                    PressedBackground="{DynamicResource FocusMaskColor}"
                    Click="MinimizeBtn_Click">
