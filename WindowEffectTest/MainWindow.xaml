@@ -24,8 +24,8 @@
     <local:WindowMaterial.Material>
         <local:WindowMaterial x:Name="windowMaterial" 
                               IsDarkMode="False" 
-                              UseWindowComposition="False"
-                              MaterialMode="MicaAlt" 
+                              UseWindowComposition="True"
+                              MaterialMode="Acrylic" 
                               WindowChromeEx="{StaticResource windowChrome}"
                               CompositonColor="#CC6699FF" >
         </local:WindowMaterial>
@@ -81,7 +81,7 @@
                                StaysOpen="False"
                                Placement="Mouse"
                                Background="{DynamicResource PopupWindowBackground}">
-                <Grid Height="100" Width="50">
+                <Grid Height="120" Width="180">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
                         nihao 
                     </TextBlock>

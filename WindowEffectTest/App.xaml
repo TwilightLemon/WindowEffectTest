@@ -8,22 +8,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="IconData.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <SolidColorBrush x:Key="ForeColor"
-                             Color="White" />
-            <SolidColorBrush x:Key="MaskColor"
-                             Color="#0CFFFFFF" />
-            <SolidColorBrush x:Key="FocusMaskColor"
-                             Color="#19FFFFFF" />
-            <SolidColorBrush x:Key="PopupWindowBackground"
-                             Color="#0Cffffff" />
+            <SolidColorBrush x:Key="ForeColor" Color="White" />
+            <SolidColorBrush x:Key="MaskColor" Color="#0CFFFFFF" />
+            <SolidColorBrush x:Key="FocusMaskColor" Color="#19FFFFFF" />
+            <SolidColorBrush x:Key="PopupWindowBackground" Color="#0Cffffff" />
 
             <Style TargetType="{x:Type ToolTip}">
-                <Setter Property="local:FluentTooltip.UseFluentStyle"
-                        Value="True" />
-                <Setter Property="Background"
-                        Value="{DynamicResource PopupWindowBackground}" />
-                <Setter Property="Foreground"
-                        Value="{DynamicResource ForeColor}" />
+                <Setter Property="local:FluentTooltip.UseFluentStyle" Value="True" />
+                <Setter Property="Background" Value="{DynamicResource PopupWindowBackground}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForeColor}" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>
