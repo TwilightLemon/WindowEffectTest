@@ -2,91 +2,137 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WindowEffectTest"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ws="https://schemas.elecho.dev/wpfsuite"
-        mc:Ignorable="d"
         x:Name="window"
+        Title="MainWindow"
+        Width="360"
+        Height="255"
+        local:DwmAnimation.EnableDwmAnimation="True"
+        ws:WindowOption.Corner="Round"
+        Background="Transparent"
+        Foreground="{DynamicResource ForeColor}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         ResizeMode="NoResize"
         Topmost="True"
-        Title="MainWindow"
-        Height="255"
-        Width="360"
-        Background="Transparent"
-        Foreground="{DynamicResource ForeColor}"
-        ws:WindowOption.Corner="Round"
-        local:DwmAnimation.EnableDwmAnimation="True">
+        mc:Ignorable="d">
     <Window.Resources>
-        <WindowChrome x:Key="windowChrome" CaptionHeight="1"/>
+        <WindowChrome x:Key="windowChrome" CaptionHeight="1" />
     </Window.Resources>
 
     <local:WindowMaterial.Material>
-        <local:WindowMaterial x:Name="windowMaterial" 
-                              IsDarkMode="False" 
+        <local:WindowMaterial x:Name="windowMaterial"
+                              CompositonColor="#CC6699FF"
+                              IsDarkMode="False"
+                              MaterialMode="Acrylic"
                               UseWindowComposition="True"
-                              MaterialMode="Acrylic" 
-                              WindowChromeEx="{StaticResource windowChrome}"
-                              CompositonColor="#CC6699FF" >
-        </local:WindowMaterial>
+                              WindowChromeEx="{StaticResource windowChrome}" />
     </local:WindowMaterial.Material>
-    
+
     <DockPanel>
-        <Grid DockPanel.Dock="Top" Height="48">
-            <TextBlock VerticalAlignment="Center"  HorizontalAlignment="Left"
-                       Text="{Binding Title, ElementName=window}"
-                       Margin="20 0 0 0"/>
-            <ws:Button Name="CloseBtn" Width="48" Height="48"
-                   HorizontalAlignment="Right"
-                   BorderThickness="0"
-                   Background="Transparent"
-                   HoverBackground="#FFE32820" PressedBackground="#FFEF1E15"
-                   Click="CloseBtn_Click">
-                <Path Stretch="Uniform" Data="{StaticResource Icon_Close}" Width="10" Height="10" Fill="{DynamicResource ForeColor}"/>
+        <Grid Height="48" DockPanel.Dock="Top">
+            <TextBlock Margin="20,0,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Text="{Binding Title, ElementName=window}" />
+            <ws:Button Name="CloseBtn"
+                       Width="48"
+                       Height="48"
+                       HorizontalAlignment="Right"
+                       Background="Transparent"
+                       BorderThickness="0"
+                       Click="CloseBtn_Click"
+                       HoverBackground="#FFE32820"
+                       PressedBackground="#FFEF1E15">
+                <Path Width="10"
+                      Height="10"
+                      Data="{StaticResource Icon_Close}"
+                      Fill="{DynamicResource ForeColor}"
+                      Stretch="Uniform" />
             </ws:Button>
-            <ws:Button Name="MaxmizeBtn" Width="48" Height="48" Margin="0 0 48 0"
-                    Background="Transparent"
-                    HoverBackground="{DynamicResource MaskColor}"
-                    PressedBackground="{DynamicResource FocusMaskColor}"
-                    HorizontalAlignment="Right"
-                    BorderThickness="0"
-                    Click="MaxmizeBtn_Click">
-                <Path x:Name="MaxmizeIcon" Stretch="Uniform" Data="{StaticResource Icon_Maximize}" Width="10" Height="10" Fill="{DynamicResource ForeColor}"/>
+            <ws:Button Name="MaxmizeBtn"
+                       Width="48"
+                       Height="48"
+                       Margin="0,0,48,0"
+                       HorizontalAlignment="Right"
+                       Background="Transparent"
+                       BorderThickness="0"
+                       Click="MaxmizeBtn_Click"
+                       HoverBackground="{DynamicResource MaskColor}"
+                       PressedBackground="{DynamicResource FocusMaskColor}">
+                <Path x:Name="MaxmizeIcon"
+                      Width="10"
+                      Height="10"
+                      Data="{StaticResource Icon_Maximize}"
+                      Fill="{DynamicResource ForeColor}"
+                      Stretch="Uniform" />
             </ws:Button>
-            <ws:Button Name="MinimizeBtn" Width="48" Height="48" Margin="0 0 96 0"
-                   Background="Transparent"
-                   HorizontalAlignment="Right"
-                   BorderThickness="0"
-                   HoverBackground="{DynamicResource MaskColor}"
-                   PressedBackground="{DynamicResource FocusMaskColor}"
-                   Click="MinimizeBtn_Click">
-                <Path Stretch="Uniform" Data="{StaticResource Icon_Minimize}" Width="10" Height="10" Fill="{DynamicResource ForeColor}"/>
+            <ws:Button Name="MinimizeBtn"
+                       Width="48"
+                       Height="48"
+                       Margin="0,0,96,0"
+                       HorizontalAlignment="Right"
+                       Background="Transparent"
+                       BorderThickness="0"
+                       Click="MinimizeBtn_Click"
+                       HoverBackground="{DynamicResource MaskColor}"
+                       PressedBackground="{DynamicResource FocusMaskColor}">
+                <Path Width="10"
+                      Height="10"
+                      Data="{StaticResource Icon_Minimize}"
+                      Fill="{DynamicResource ForeColor}"
+                      Stretch="Uniform" />
             </ws:Button>
         </Grid>
         <Grid>
             <CheckBox x:Name="DarkModeCheck"
-                      IsChecked="{Binding IsDarkMode, Mode=TwoWay}"
-                      Foreground="{DynamicResource ForeColor}"
-                      ToolTip="Switch Color Mode"
+                      Margin="20,21,20,0"
+                      VerticalAlignment="Top"
                       Content="DarkMode"
-                      Margin="20"  VerticalAlignment="Top" />
-                    <Button  x:Name="ShowPopupBtn"
-                             VerticalAlignment="Top"
-                             HorizontalAlignment="Left"
-                             Margin="20 90 0 0"
-                             Click="ShowPopupBtn_Click">
-                        Show Popup
+                      Foreground="{DynamicResource ForeColor}"
+                      IsChecked="{Binding IsDarkMode, Mode=TwoWay}"
+                      ToolTip="Switch Color Mode" />
+            <Button x:Name="ShowPopupBtn"
+                    Margin="20,90,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Click="ShowPopupBtn_Click">
+                Show Popup
             </Button>
             <local:FluentPopup x:Name="testPopup"
-                               StaysOpen="False"
+                               Background="{DynamicResource PopupWindowBackground}"
+                               ExtPopupAnimation="SlideDown"
                                Placement="Mouse"
-                               Background="{DynamicResource PopupWindowBackground}">
-                <Grid Height="120" Width="180">
+                               StaysOpen="False">
+                <Grid Width="180" Height="120">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                        nihao 
+                        nihao
                     </TextBlock>
                 </Grid>
             </local:FluentPopup>
+            <TextBlock Width="112"
+                       Margin="199,84,0,0"
+                       Padding="8,4"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Background="#69F"
+                       Text="ContextMenu"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Menu Item 1" Icon="Cd" InputGestureText="aa?" />
+                        <MenuItem Header="Menu Item 2" >
+                            <MenuItem Header="Child Item 1" Icon="Ab" />
+                            <MenuItem Header="Child Item 2" Icon="Ad" />
+                            <MenuItem Header="Child Item 3" IsCheckable="True" IsChecked="True"/>
+                        </MenuItem>
+                        <MenuItem Header="Menu Item 3" Icon="cd" />
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+
         </Grid>
     </DockPanel>
 </Window>

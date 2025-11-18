@@ -6,18 +6,35 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ContextMenuResources.xaml" />
                 <ResourceDictionary Source="IconData.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="AccentColor" Color="#69F" />
             <SolidColorBrush x:Key="ForeColor" Color="White" />
             <SolidColorBrush x:Key="MaskColor" Color="#0CFFFFFF" />
             <SolidColorBrush x:Key="FocusMaskColor" Color="#19FFFFFF" />
-            <SolidColorBrush x:Key="PopupWindowBackground" Color="#0Cffffff" />
+            <SolidColorBrush x:Key="PopupWindowBackground" Color="#6C000000" />
 
             <Style TargetType="{x:Type ToolTip}">
                 <Setter Property="local:FluentTooltip.UseFluentStyle" Value="True" />
                 <Setter Property="Background" Value="{DynamicResource PopupWindowBackground}" />
                 <Setter Property="Foreground" Value="{DynamicResource ForeColor}" />
             </Style>
+
+            <Style BasedOn="{StaticResource DefaultContextMenuStyle}" TargetType="{x:Type ContextMenu}">
+                <Style.Setters>
+                    <Setter Property="local:FluentTooltip.UseFluentStyle" Value="True" />
+                    <Setter Property="Background" Value="{DynamicResource PopupWindowBackground}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ForeColor}" />
+                    <Setter Property="HasDropShadow" Value="False" />
+                </Style.Setters>
+            </Style>
+            <Style BasedOn="{StaticResource DefaultMenuItemStyle}" TargetType="MenuItem">
+                <Setter Property="Height" Value="36" />
+                <Setter Property="Foreground" Value="{DynamicResource ForeColor}" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

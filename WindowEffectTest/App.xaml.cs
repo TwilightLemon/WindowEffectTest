@@ -17,6 +17,8 @@ namespace WindowEffectTest
         public static void SetDarkMode(bool isDarkMode)
         {
             App.Current.Resources["ForeColor"]=isDarkMode?Brushes.White: Brushes.Black;
+            App.Current.Resources["PopupWindowBackground"] = new SolidColorBrush(isDarkMode ? Color.FromArgb(0x6C, 0, 0, 0) : Color.FromArgb(0x6C, 0xFF, 0xFF, 0xFF));
+
         }
     }
 }

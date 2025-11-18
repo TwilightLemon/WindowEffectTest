@@ -1,12 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Shell;
-using static WindowEffectTest.MaterialApis;
 
 namespace WindowEffectTest
 {
