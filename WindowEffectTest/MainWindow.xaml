@@ -86,8 +86,27 @@
             </ws:Button>
         </Grid>
         <Grid>
+            <Menu VerticalAlignment="Top"
+                  Background="Transparent"
+                  Foreground="{DynamicResource ForeColor}">
+                <!-- This is TopLevelHeader because it has children -->
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New"/>
+                    <!-- SubmenuItem (no children) -->
+                    <MenuItem Header="_Open"/>
+                    <!-- SubmenuItem (no children) -->
+                    <MenuItem Header="_Recent Files">
+                        <MenuItem Header="File1.txt"/>
+                        <!-- SubmenuItem -->
+                    </MenuItem>
+                    <!-- SubmenuHeader (has children) -->
+                </MenuItem>
+
+                <!-- This is TopLevelItem because it has no children -->
+                <MenuItem Header="_Help"/>
+            </Menu>
             <CheckBox x:Name="DarkModeCheck"
-                      Margin="20,21,20,0"
+                      Margin="20,50,20,0"
                       VerticalAlignment="Top"
                       Content="DarkMode"
                       Foreground="{DynamicResource ForeColor}"

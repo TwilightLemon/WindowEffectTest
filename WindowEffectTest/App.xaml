@@ -26,7 +26,6 @@
                     <Setter Property="local:FluentTooltip.UseFluentStyle" Value="True" />
                     <Setter Property="Background" Value="{DynamicResource PopupWindowBackground}" />
                     <Setter Property="Foreground" Value="{DynamicResource ForeColor}" />
-                    <Setter Property="HasDropShadow" Value="False" />
                 </Style.Setters>
             </Style>
             <Style BasedOn="{StaticResource DefaultMenuItemStyle}" TargetType="MenuItem">
