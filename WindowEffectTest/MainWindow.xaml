@@ -122,8 +122,10 @@
             <local:FluentPopup x:Name="testPopup"
                                Background="{DynamicResource PopupWindowBackground}"
                                ExtPopupAnimation="SlideDown"
-                               Placement="Mouse"
-                               StaysOpen="False">
+                               PlacementTarget="{Binding ElementName=ShowPopupBtn}"
+                               FollowWindowMoving="True"
+                               Placement="Bottom"
+                               StaysOpen="true">
                 <Grid Width="180" Height="120">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
                         nihao

@@ -1,75 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace WindowEffectTest;
-
-public static class FluentTooltip
-{
-    public static bool GetUseFluentStyle(DependencyObject obj)
-    {
-        return (bool)obj.GetValue(UseFluentStyleProperty);
-    }
-
-    public static void SetUseFluentStyle(DependencyObject obj, bool value)
-    {
-        obj.SetValue(UseFluentStyleProperty, value);
-    }
-
-    public static readonly DependencyProperty UseFluentStyleProperty =
-        DependencyProperty.RegisterAttached("UseFluentStyle",
-            typeof(bool), typeof(FluentTooltip),
-            new PropertyMetadata(false, OnUseFluentStyleChanged));
-    public static void OnUseFluentStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-    {
-        if (e.NewValue != e.OldValue)
-        {
-            if (obj is ToolTip tip)
-            {
-                if ((bool)e.NewValue)
-                {
-                    tip.Opened += Popup_Opened;
-                }
-                else
-                {
-                    tip.Opened -= Popup_Opened;
-                }
-            }
-            else if (obj is ContextMenu menu)
-            {
-                if ((bool)e.NewValue)
-                {
-                    menu.Opened += Popup_Opened;
-                }
-                else
-                {
-                    menu.Opened -= Popup_Opened;
-                }
-            }
-        }
-    }
-
-    private static void Popup_Opened(object sender, RoutedEventArgs e)
-    {
-        if (sender is ToolTip tip && tip.Background is SolidColorBrush cb)
-        {
-            var hwnd = tip.GetNativeWindowHwnd();
-            FluentPopupFunc.SetPopupWindowMaterial(hwnd, cb.Color, MaterialApis.WindowCorner.RoundSmall);
-        }
-        else if (sender is ContextMenu menu && menu.Background is SolidColorBrush color)
-        {
-            var hwnd = menu.GetNativeWindowHwnd();
-            Debug.WriteLine(hwnd);
-            FluentPopupFunc.SetPopupWindowMaterial(hwnd, color.Color, MaterialApis.WindowCorner.Round);
-        }
-    }
-}
 
 public class FluentPopup : Popup
 {
@@ -110,6 +47,10 @@ public class FluentPopup : Popup
             {
                 window.LocationChanged += popup.AttachedWindow_LocationChanged;
                 window.SizeChanged += popup.AttachedWindow_SizeChanged;
+            }else
+            {
+                window.LocationChanged -= popup.AttachedWindow_LocationChanged;
+                window.SizeChanged -= popup.AttachedWindow_SizeChanged;
             }
         }
     }
@@ -147,12 +88,13 @@ public class FluentPopup : Popup
     {
         if (IsOpen)
         {
-            var mi = typeof(Popup).GetMethod("UpdatePosition", BindingFlags.NonPublic | BindingFlags.Instance);
-            mi?.Invoke(this, null);
+            //var mi = typeof(Popup).GetMethod("UpdatePosition", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            //mi.Invoke(this, null);
+            CallUpdatePosition(this);
         }
     }
-
-
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name="UpdatePosition")]
+    static extern void CallUpdatePosition(Popup popup);
 
     #endregion
     #region 启动动画控制
@@ -264,63 +206,4 @@ public class FluentPopup : Popup
         MaterialApis.SetWindowCorner(_windowHandle, WindowCorner);
     }
     #endregion
-}
-
-internal static class FluentPopupFunc
-{
-    public const BindingFlags privateInstanceFlag = BindingFlags.NonPublic | BindingFlags.Instance;
-    public static IntPtr GetNativeWindowHwnd(this ToolTip tip)
-    {
-        var field = tip.GetType().GetField("_parentPopup", privateInstanceFlag);
-        if (field != null)
-        {
-            if (field.GetValue(tip) is Popup { } popup)
-            {
-                return popup.GetNativeWindowHwnd();
-            }
-        }
-        return IntPtr.Zero;
-    }
-    public static IntPtr GetNativeWindowHwnd(this ContextMenu menu)
-    {
-        var field = menu.GetType().GetField("_parentPopup", privateInstanceFlag);
-        if (field != null)
-        {
-            if (field.GetValue(menu) is Popup { } popup)
-            {
-                return popup.GetNativeWindowHwnd();
-            }
-        }
-        return IntPtr.Zero;
-    }
-    public static IntPtr GetNativeWindowHwnd(this Popup popup)
-    {
-        var field = typeof(Popup).GetField("_secHelper", privateInstanceFlag);
-        if (field != null)
-        {
-            if (field.GetValue(popup) is { } _secHelper)
-            {
-                if (_secHelper.GetType().GetProperty("Handle", privateInstanceFlag) is { } prop)
-                {
-                    if (prop.GetValue(_secHelper) is IntPtr handle)
-                    {
-                        return handle;
-                    }
-                }
-            }
-        }
-        return IntPtr.Zero;
-    }
-    public static void SetPopupWindowMaterial(IntPtr hwnd, Color compositionColor,
-        MaterialApis.WindowCorner corner = MaterialApis.WindowCorner.Round)
-    {
-        if (hwnd != IntPtr.Zero)
-        {
-            int hexColor = compositionColor.ToHexColor();
-            var hwndSource = HwndSource.FromHwnd(hwnd);
-            MaterialApis.SetWindowProperties(hwndSource, 1);
-            MaterialApis.SetWindowComposition(hwnd, true, hexColor);
-            MaterialApis.SetWindowCorner(hwnd, corner);
-        }
-    }
 }

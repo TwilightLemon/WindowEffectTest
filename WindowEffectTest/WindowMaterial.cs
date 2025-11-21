@@ -1,11 +1,9 @@
 ﻿using EleCho.WpfSuite;
 using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shell;
-using static WindowEffectTest.MaterialApis;
 
 namespace WindowEffectTest;
 
@@ -267,137 +265,4 @@ public enum MaterialType
     Acrylic = 3,
     Mica = 2,
     MicaAlt = 4
-}
-
-public static class MaterialApis
-{
-    public static int ToHexColor(this Color value)
-    {
-        return value.R << 0 | value.G << 8 | value.B << 16 | value.A << 24;
-    }
-    public static void SetWindowProperties(HwndSource hwndSource,int margin)
-    {
-        hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
-        var margins = new Margins()
-        {
-            LeftWidth = margin,
-            TopHeight = margin,
-            RightWidth = margin,
-            BottomHeight = margin
-        };
-
-        DwmExtendFrameIntoClientArea(hwndSource.Handle, ref margins);
-    }
-
-
-    [DllImport("DWMAPI")]
-    public static extern nint DwmExtendFrameIntoClientArea(nint hwnd, ref Margins margins);
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Margins
-    {
-        public int LeftWidth;
-        public int RightWidth;
-        public int TopHeight;
-        public int BottomHeight;
-    }
-
-
-    [DllImport("user32.dll")]
-    private static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
-
-    private enum AccentState
-    {
-        ACCENT_DISABLED = 0,
-        ACCENT_ENABLE_GRADIENT = 1,
-        ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
-        ACCENT_ENABLE_BLURBEHIND = 3,
-        ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
-        ACCENT_INVALID_STATE = 5,
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct AccentPolicy
-    {
-        public AccentState AccentState;
-        public int AccentFlags;
-        public int GradientColor;
-        public int AnimationId;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct WindowCompositionAttributeData
-    {
-        public WindowCompositionAttribute Attribute;
-        public IntPtr Data;
-        public int SizeOfData;
-    }
-
-    private enum WindowCompositionAttribute
-    {
-        WCA_ACCENT_POLICY = 19,
-    }
-
-    [DllImport("dwmapi.dll")]
-    static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, ref int pvAttribute, int cbAttribute);
-
-    public static int SetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, int parameter)
-        => DwmSetWindowAttribute(hwnd, attribute, ref parameter, Marshal.SizeOf<int>());
-
-    [Flags]
-    public enum DWMWINDOWATTRIBUTE
-    {
-        DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
-        DWMWA_SYSTEMBACKDROP_TYPE = 38,
-        WINDOW_CORNER_PREFERENCE = 33
-    }
-    public enum WindowCorner
-    {
-        Default = 0,
-        DoNotRound = 1,
-        Round = 2,
-        RoundSmall = 3
-    }
-    public static void SetWindowCorner(IntPtr handle,WindowCorner corner)
-    {
-        SetWindowAttribute(handle, DWMWINDOWATTRIBUTE.WINDOW_CORNER_PREFERENCE,(int)corner);
-    }
-
-    public static void SetWindowComposition(IntPtr handle, bool enable, int? hexColor = null)
-    {
-        var accent = new AccentPolicy();
-        if (!enable)
-        {
-            accent.AccentState = AccentState.ACCENT_DISABLED;
-        }
-        else
-        {
-            accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
-            accent.GradientColor = hexColor ?? 0x00000000;
-        }
-        var data = new WindowCompositionAttributeData
-        {
-            Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY,
-            SizeOfData = Marshal.SizeOf<AccentPolicy>(),
-            Data = Marshal.AllocHGlobal(Marshal.SizeOf<AccentPolicy>())
-        };
-        Marshal.StructureToPtr(accent, data.Data, false);
-        SetWindowCompositionAttribute(handle, ref data);
-        Marshal.FreeHGlobal(data.Data);
-    }
-    public static void SetBackDropType(IntPtr handle, MaterialType mode)
-    {
-        SetWindowAttribute(
-            handle,
-            DWMWINDOWATTRIBUTE.DWMWA_SYSTEMBACKDROP_TYPE,
-            (int)mode);
-    }
-
-    public static void SetDarkMode(IntPtr handle, bool isDarkMode)
-    {
-        SetWindowAttribute(
-                    handle,
-                    DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
-                    isDarkMode ? 1 : 0);
-    }
 }
