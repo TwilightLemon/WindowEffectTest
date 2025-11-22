@@ -15,9 +15,9 @@ internal static class FluentPopupFunc
     public static IntPtr GetNativeWindowHwnd(this ContextMenu menu) => GetPopup(menu).GetNativeWindowHwnd();
 
     [UnsafeAccessor(UnsafeAccessorKind.Field,Name ="_parentPopup")]
-    private static extern Popup GetPopup(ToolTip tip);
+    private static extern ref Popup GetPopup(ToolTip tip);
     [UnsafeAccessor(UnsafeAccessorKind.Field,Name ="_parentPopup")]
-    private static extern Popup GetPopup(ContextMenu tip);
+    private static extern ref Popup GetPopup(ContextMenu tip);
 
     public static IntPtr GetNativeWindowHwnd(this Popup popup)
     {
